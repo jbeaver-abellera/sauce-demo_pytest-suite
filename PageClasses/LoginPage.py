@@ -1,7 +1,7 @@
 import PageClasses as pc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-
+from selenium.common.exceptions import NoSuchElementException
 
 class LoginPage(pc.BasePage):
     def __init__(self, driver):
@@ -20,6 +20,13 @@ class LoginPage(pc.BasePage):
     def loginBtn(self):
         return self.driver.find_element(By.XPATH, '//*[@id="login-button"]')
 
+    @property
+    def loginErrorMessage(self):
+        try:
+            return self.driver.find_element(By.XPATH, '//h3[@data-test="error"]')
+        except NoSuchElementException:
+            return None
+    
     def openLoginPage(self):
         self.navigateToHome()
     

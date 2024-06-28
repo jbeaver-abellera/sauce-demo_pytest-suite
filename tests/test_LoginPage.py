@@ -17,14 +17,13 @@ def setup_teardown(suite_conftest):
     # '''Teardown'''
     # dropdownPage.navigateToHome()
     
-# @pytest.mark.parametrize('username', ['standard_user', 'locked_out_user'])
-def test_login(setup_teardown):
+@pytest.mark.parametrize('username', ['standard_user', 'locked_out_user', 'problem_user'])
+def test_login(username,setup_teardown):
     loginPage = setup_teardown
-    username = 'standard_user'
+    # username = 'standard_user'
     password = 'secret_sauce'
     initial_url = loginPage.driver.current_url
     loginPage.login(username, password)
-    try:
-        loginPage.driver = WebDriverWait(loginPage.driver, 30).until(lambda driver: loginPage.driver.current_url != initial_url)
-    except TimeoutException:
-        raise AssertionError(f'Timeout error. Checkbox did not toggle.')
+    noErrorMessage = loginPage.loginErrorMessage == None
+    loginPage.openLoginPage()
+    assert noErrorMessage
